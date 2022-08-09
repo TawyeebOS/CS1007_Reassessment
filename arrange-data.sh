@@ -13,7 +13,10 @@ fi
 for file in /cs/studres/CS1007/Assessment/Reassessment/sourcedata/descriptions/* #iterate thorugh every file in descriptions sub-directory
 do
 	title=$(head -n 1 $file | gawk 'BEGIN{FS=": "} {print $2}') #breaks first line of file with the delimiter : , and takes the 2nd value ( as first line in form of Title: name_of_tree)
-	mkdir "$target_directory/$title" #makes a new sub-directory inside target directory using the description title as a name
+	if [ ! -d "$target_directory/$title" ]; #checks if the new sub-directory already exists, if not it creates a new one
+	then
+        	mkdir "$target_directory/$title" #makes a new sub-directory inside target directory using the description title as a name
+	fi
 
 	file_title=$(echo "$file" | gawk 'BEGIN{FS="[/.]"} {print $8}') #splits file path using / and . as delimeters (. to also split the file extension) and taking the 8th element
 	cp "$file" "/cs/studres/CS1007/Assessment/Reassessment/sourcedata/images/$file_title.jpg" "/cs/studres/CS1007/Assessment/Reassessment/sourcedata/images/$file_title-copyright.txt" "$target_directory/$title" #use the new variable to find the corresdoing image and copyright files in the images sub-directory as well as the description file itself
